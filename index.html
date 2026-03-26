@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Future Capital - Trading Checklist</title>
+  <meta name="theme-color" content="#0b1220">
+  <style>
+    :root{
+      --bg:#08111f;
+      --panel:#0f1b31;
+      --panel-2:#13233d;
+      --text:#eef4ff;
+      --muted:#9fb2d1;
+      --line:rgba(255,255,255,.08);
+      --ok:#18c37e;
+      --warn:#ffb020;
+      --bad:#ff5d73;
+      --blue1:#123d8f;
+      --blue2:#0b6bcb;
+      --shadow:0 18px 48px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:
+      radial-gradient(circle at top left, rgba(31,89,198,.22), transparent 35%),
+      radial-gradient(circle at top right, rgba(11,107,203,.16), transparent 28%),
+      linear-gradient(180deg,#06101d,#08111f 55%,#091526 100%);
+      color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+    body{min-height:100vh}
+    .app{max-width:860px;margin:0 auto;padding:22px 16px 40px}
+    .brand{
+      padding:22px 20px 12px;
+      text-align:center;
+    }
+    .logo{
+      width:72px;height:72px;border-radius:20px;margin:0 auto 14px;
+      background:linear-gradient(135deg,var(--blue2),var(--blue1));
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:var(--shadow);
+      font-size:28px;font-weight:800;letter-spacing:.5px;
+    }
+    h1{margin:0;font-size:30px;line-height:1.1}
+    .subtitle{color:var(--muted);margin:10px auto 0;max-width:620px;line-height:1.45}
+    .screen{display:none;animation:fade .22s ease}
+    .screen.active{display:block}
+    @keyframes fade{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:none}}
+    .card{
+      background:linear-gradient(180deg,rgba(19,35,61,.96),rgba(13,25,45,.96));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-top:16px;
+      backdrop-filter: blur(10px);
+    }
+    .card h2{margin:2px 0 8px;font-size:22px}
+    .small{font-size:13px;color:var(--muted)}
+    .grid{display:grid;gap:14px}
+    .grid-2{grid-template-columns:1fr 1fr}
+    @media (max-width:700px){.grid-2{grid-template-columns:1fr}}
+    .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .pill{
+      background:#0b1730;border:1px solid var(--line);color:var(--text);
+      padding:10px 14px;border-radius:999px;font-size:14px
+    }
+    .primary,.secondary,.danger{
+      border:none;border-radius:16px;padding:14px 18px;font-size:16px;
+      font-weight:700;cursor:pointer;transition:.18s transform ease,.18s opacity ease,.18s box-shadow ease;
+      width:100%;
+    }
+    .primary:hover,.secondary:hover,.danger:hover{transform:translateY(-1px)}
+    .primary{background:linear-gradient(135deg,var(--blue2),var(--blue1));color:#fff;box-shadow:0 12px 30px rgba(11,107,203,.28)}
+    .secondary{background:#101d34;color:#fff;border:1px solid var(--line)}
+    .danger{background:linear-gradient(135deg,#b5233b,#7e1428);color:#fff}
+    .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+    @media (max-width:560px){.btn-row{grid-template-columns:1fr}}
+    .question{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line);border-radius:18px;padding:14px;
+      display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;
+    }
+    .question-title{font-size:16px;line-height:1.3}
+    .toggle-group{display:flex;gap:8px}
+    .toggle{
+      min-width:58px;padding:10px 12px;border-radius:13px;border:1px solid var(--line);
+      background:#0c1730;color:var(--text);font-weight:700;cursor:pointer
+    }
+    .toggle.active.yes{background:rgba(24,195,126,.16);border-color:rgba(24,195,126,.45);color:#dff8ee}
+    .toggle.active.no{background:rgba(255,93,115,.15);border-color:rgba(255,93,115,.4);color:#ffe6ea}
+    .result{
+      padding:16px;border-radius:18px;margin-top:16px;border:1px solid var(--line);
+      background:#0c1730
+    }
+    .result.ok{border-color:rgba(24,195,126,.35);background:rgba(24,195,126,.11)}
+    .result.warn{border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.10)}
+    .result.bad{border-color:rgba(255,93,115,.35);background:rgba(255,93,115,.10)}
+    .result-title{font-size:20px;font-weight:800;margin-bottom:6px}
+    .result-text{line-height:1.45}
+    .section-title{font-size:13px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin:3px 0 10px}
+    .summary-box{display:grid;gap:10px}
+    .summary-item{
+      display:flex;justify-content:space-between;gap:12px;
+      padding:12px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--line)
+    }
+    .tag{
+      display:inline-flex;align-items:center;gap:8px;
+      border-radius:999px;padding:10px 13px;background:rgba(255,255,255,.04);
+      border:1px solid var(--line);font-size:14px
+    }
+    .history-item{
+      padding:12px 14px;border-radius:14px;border:1px solid var(--line);
+      background:rgba(255,255,255,.03);margin-top:10px
+    }
+    .muted{color:var(--muted)}
+    .right{text-align:right}
+    .center{text-align:center}
+    .spacer{height:8px}
+    .footer-note{margin-top:18px;font-size:12px;color:var(--muted);text-align:center}
+    .locked{
+      display:inline-block;margin-top:10px;padding:8px 10px;border-radius:10px;
+      background:rgba(255,176,32,.12);border:1px solid rgba(255,176,32,.28);color:#ffd48b;font-size:13px
+    }
+    .app-badge{
+      display:inline-block;padding:8px 12px;border-radius:999px;
+      background:rgba(11,107,203,.16);border:1px solid rgba(11,107,203,.32);
+      color:#dbe9ff;font-size:13px;margin-top:10px
+    }
+    select, input[type="text"]{
+      width:100%;padding:14px 14px;border-radius:14px;border:1px solid var(--line);
+      background:#0c1730;color:#fff;font-size:15px;outline:none;
+    }
+    label{display:block;margin-bottom:8px;color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="brand">
+      <div class="logo">FC</div>
+      <h1>Trading Checklist</h1>
+      <div class="subtitle">
+        Tu sistema de disciplina personal para ejecutar tu plan exactamente como lo definiste:
+        <strong>1 trade al día</strong>, <strong>RR 1:2</strong>, <strong>0.3% fondeada</strong> y <strong>0.6% evaluación</strong>.
+      </div>
+      <div class="app-badge">Versión personal · Future Capital</div>
+    </div>
+
+    <section id="screen-home" class="screen active">
+      <div class="card">
+        <h2>Inicio del día</h2>
+        <div class="small">Configura el día y empieza tu proceso como piloto antes del despegue.</div>
+
+        <div class="grid grid-2" style="margin-top:16px">
+          <div>
+            <label for="accountType">Tipo de cuenta de hoy</label>
+            <select id="accountType">
+              <option value="funded">Fondeada · Riesgo fijo 0.3%</option>
+              <option value="evaluation">Evaluación · Riesgo fijo 0.6%</option>
+            </select>
+          </div>
+          <div>
+            <label for="sessionName">Etiqueta del día (opcional)</label>
+            <input id="sessionName" type="text" placeholder="Ej: NY Open / Londres / Martes" />
+          </div>
+        </div>
+
+        <div class="pill-row">
+          <div class="pill">1 trade máximo por día</div>
+          <div class="pill">RR fijo 1:2</div>
+          <div class="pill">Sin subir ni bajar riesgo</div>
+          <div class="pill">Operar lunes a viernes</div>
+        </div>
+
+        <div class="btn-row">
+          <button class="primary" onclick="startDay()">Start Trading Day</button>
+          <button class="secondary" onclick="showHistory()">Ver historial</button>
+        </div>
+
+        <div id="todayLockBox"></div>
+      </div>
+    </section>
+
+    <section id="screen-pre" class="screen">
+      <div class="card">
+        <div class="section-title">Checklist 1 · Antes de operar</div>
+        <h2>Pre-market</h2>
+        <div class="small">Confirma que hoy estás listo para ejecutar tu plan sin alterarlo.</div>
+        <div id="preQuestions" class="grid" style="margin-top:16px"></div>
+        <div id="preResult" class="result" style="display:none"></div>
+        <div class="btn-row">
+          <button class="secondary" onclick="goHome()">Volver</button>
+          <button class="primary" onclick="evaluatePre()">Evaluar checklist</button>
+        </div>
+        <button id="continueToTradeBtn" class="primary" style="margin-top:12px;display:none" onclick="goToTrade()">Continuar al trade</button>
+      </div>
+    </section>
+
+    <section id="screen-trade" class="screen">
+      <div class="card">
+        <div class="section-title">Checklist 2 · Durante el trade</div>
+        <h2>En ejecución</h2>
+        <div class="small">Checklist corto para validar que la operación está bien ejecutada.</div>
+        <div id="tradeQuestions" class="grid" style="margin-top:16px"></div>
+        <div id="tradeResult" class="result" style="display:none"></div>
+        <div class="btn-row">
+          <button class="secondary" onclick="backToPre()">Volver</button>
+          <button class="primary" onclick="evaluateTrade()">Evaluar ejecución</button>
+        </div>
+        <button id="continueToPostBtn" class="primary" style="margin-top:12px;display:none" onclick="goToPost()">Ir al cierre del día</button>
+      </div>
+    </section>
+
+    <section id="screen-post" class="screen">
+      <div class="card">
+        <div class="section-title">Checklist 3 · Después del trade</div>
+        <h2>Post-market</h2>
+        <div class="small">Aquí no evaluamos dinero. Evaluamos disciplina, obediencia y ejecución.</div>
+
+        <div class="grid grid-2" style="margin-top:16px">
+          <div>
+            <label for="tradeOutcome">Resultado del trade</label>
+            <select id="tradeOutcome">
+              <option value="win">Ganó</option>
+              <option value="loss">Perdió</option>
+            </select>
+          </div>
+          <div>
+            <label for="marketNote">Nota corta del día (opcional)</label>
+            <input id="marketNote" type="text" placeholder="Ej: Entrada limpia / mercado lento" />
+          </div>
+        </div>
+
+        <div id="postQuestions" class="grid" style="margin-top:16px"></div>
+        <div id="postResult" class="result" style="display:none"></div>
+        <div class="btn-row">
+          <button class="secondary" onclick="backToTrade()">Volver</button>
+          <button class="primary" onclick="evaluatePost()">Cerrar el día</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-final" class="screen">
+      <div class="card">
+        <div class="section-title">Resumen final</div>
+        <h2>Día registrado</h2>
+        <div id="finalMessage" class="result ok"></div>
+
+        <div class="summary-box" style="margin-top:16px">
+          <div class="summary-item"><span>Tipo de cuenta</span><strong id="sumAccountType"></strong></div>
+          <div class="summary-item"><span>Riesgo fijo del día</span><strong id="sumRisk"></strong></div>
+          <div class="summary-item"><span>Resultado del trade</span><strong id="sumOutcome"></strong></div>
+          <div class="summary-item"><span>Score de disciplina</span><strong id="sumScore"></strong></div>
+          <div class="summary-item"><span>Clasificación</span><strong id="sumClass"></strong></div>
+        </div>
+
+        <div class="btn-row">
+          <button class="primary" onclick="goHome()">Volver al inicio</button>
+          <button class="secondary" onclick="showHistory()">Ver historial</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="screen-history" class="screen">
+      <div class="card">
+        <div class="section-title">Historial</div>
+        <h2>Tus días registrados</h2>
+        <div class="small">Guardado localmente en este dispositivo.</div>
+        <div id="historyStats" class="pill-row" style="margin-top:16px"></div>
+        <div id="historyList" style="margin-top:10px"></div>
+        <div class="btn-row">
+          <button class="secondary" onclick="goHome()">Volver</button>
+          <button class="danger" onclick="clearHistory()">Borrar historial</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      “Mi trabajo no es ganar dinero hoy. Mi trabajo es ejecutar el sistema.”
+    </div>
+  </div>
+
+  <script>
+    const qs = (s) => document.querySelector(s);
+    const qsa = (s) => document.querySelectorAll(s);
+    const todayKey = () => "fc_checklist_done_" + new Date().toISOString().slice(0,10);
+
+    const state = {
+      accountType: "funded",
+      sessionName: "",
+      riskText: "0.3%",
+      pre: {},
+      trade: {},
+      post: {},
+      results: {}
+    };
+
+    const preChecklist = [
+      { id:"oneTrade", text:"¿Hoy haré solo 1 trade, sin importar si gana o pierde?" },
+      { id:"rr", text:"¿Voy a respetar RR 1:2 sin moverlo?" },
+      { id:"fixedRisk", text:"¿Voy a usar el riesgo fijo exacto de hoy, sin subirlo ni bajarlo?" },
+      { id:"calm", text:"¿Estoy mentalmente estable para ejecutar mi plan?" },
+      { id:"revenge", text:"¿No estoy entrando para recuperar nada?" },
+      { id:"clarity", text:"¿Veo una estructura que encaja con mi estrategia?" },
+      { id:"news", text:"¿No hay una noticia fuerte inmediata que pueda distorsionar la entrada?" }
+    ];
+
+    const tradeChecklist = [
+      { id:"entry", text:"¿Entré exactamente donde mi estrategia lo pedía?" },
+      { id:"sl", text:"¿Mi stop loss quedó colocado y definido?" },
+      { id:"tp", text:"¿Mi take profit quedó colocado con RR 1:2?" },
+      { id:"handsOff", text:"¿Estoy dejando el trade trabajar sin interferir emocionalmente?" }
+    ];
+
+    const postChecklist = [
+      { id:"entryRespected", text:"¿Respeté mi entrada según mi plan?" },
+      { id:"slRespected", text:"¿Respeté el stop sin moverlo?" },
+      { id:"tpRespected", text:"¿Respeté el take profit sin miedo ni ansiedad?" },
+      { id:"oneTradeOnly", text:"¿Respeté la regla de no abrir un segundo trade?" },
+      { id:"accepted", text:"¿Acepté el resultado del día sin buscar revancha?" },
+      { id:"journal", text:"¿Ya quedó claro mentalmente lo que aprendí hoy?" }
+    ];
+
+    function saveHistory(entry){
+      const data = JSON.parse(localStorage.getItem("fc_trading_history") || "[]");
+      data.unshift(entry);
+      localStorage.setItem("fc_trading_history", JSON.stringify(data.slice(0,180)));
+    }
+
+    function getHistory(){
+      return JSON.parse(localStorage.getItem("fc_trading_history") || "[]");
+    }
+
+    function renderQuestions(containerId, questions, storeKey){
+      const container = qs(containerId);
+      container.innerHTML = "";
+      questions.forEach(q => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `
+          <div class="question-title">${q.text}</div>
+          <div class="toggle-group">
+            <button class="toggle yes" onclick="setAnswer('${storeKey}','${q.id}',true,this)">Sí</button>
+            <button class="toggle no" onclick="setAnswer('${storeKey}','${q.id}',false,this)">No</button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function setAnswer(section, id, value, el){
+      state[section][id] = value;
+      const wrap = el.parentElement;
+      wrap.querySelectorAll(".toggle").forEach(btn => btn.classList.remove("active"));
+      el.classList.add("active");
+    }
+
+    function switchScreen(id){
+      qsa(".screen").forEach(s => s.classList.remove("active"));
+      qs("#" + id).classList.add("active");
+      if(id === "screen-home") refreshTodayLock();
+    }
+
+    function getRiskText(){
+      return state.accountType === "funded" ? "0.3%" : "0.6%";
+    }
+
+    function startDay(){
+      state.accountType = qs("#accountType").value;
+      state.sessionName = qs("#sessionName").value.trim();
+      state.riskText = getRiskText();
+      state.pre = {};
+      state.trade = {};
+      state.post = {};
+      state.results = {};
+
+      renderQuestions("#preQuestions", preChecklist, "pre");
+      qs("#preResult").style.display = "none";
+      qs("#continueToTradeBtn").style.display = "none";
+      switchScreen("screen-pre");
+    }
+
+    function scoreAnswers(obj){
+      const vals = Object.values(obj);
+      if(vals.length === 0) return 0;
+      let yes = vals.filter(v => v === true).length;
+      return Math.round((yes / vals.length) * 100);
+    }
+
+    function allAnswered(sectionObj, template){
+      return template.every(q => typeof sectionObj[q.id] === "boolean");
+    }
+
+    function setResult(id, type, title, text){
+      const box = qs(id);
+      box.className = "result " + type;
+      box.style.display = "block";
+      box.innerHTML = `<div class="result-title">${title}</div><div class="result-text">${text}</div>`;
+    }
+
+    function evaluatePre(){
+      if(!allAnswered(state.pre, preChecklist)){
+        setResult("#preResult","warn","Checklist incompleto","Responde todas las preguntas antes de seguir.");
+        return;
+      }
+
+      const criticalFail = !state.pre.oneTrade || !state.pre.rr || !state.pre.fixedRisk;
+      const mentalFlags = [state.pre.calm, state.pre.revenge].filter(v => v === false).length;
+      const marketFlags = [state.pre.clarity, state.pre.news].filter(v => v === false).length;
+
+      if(criticalFail){
+        setResult("#preResult","bad","NO OPERAR","Hoy no estás alineado con tus reglas base. Sin 1 trade, sin RR 1:2 o sin riesgo fijo, no hay operación válida.");
+        qs("#continueToTradeBtn").style.display = "none";
+        state.results.preStatus = "NO OPERAR";
+        return;
+      }
+
+      if(mentalFlags + marketFlags >= 2){
+        setResult("#preResult","warn","RIESGO","Puedes operar solo si aceptas que hoy el foco debe ser disciplina total. No cambies tu plan.");
+        qs("#continueToTradeBtn").style.display = "block";
+        state.results.preStatus = "RIESGO";
+        return;
+      }
+
+      setResult("#preResult","ok","OK PARA OPERAR","Estás alineado con tu plan. Tu trabajo ahora es ejecutar sin alterar nada.");
+      qs("#continueToTradeBtn").style.display = "block";
+      state.results.preStatus = "OK";
+    }
+
+    function goToTrade(){
+      renderQuestions("#tradeQuestions", tradeChecklist, "trade");
+      qs("#tradeResult").style.display = "none";
+      qs("#continueToPostBtn").style.display = "none";
+      switchScreen("screen-trade");
+    }
+
+    function backToPre(){ switchScreen("screen-pre"); }
+
+    function evaluateTrade(){
+      if(!allAnswered(state.trade, tradeChecklist)){
+        setResult("#tradeResult","warn","Checklist incompleto","Responde todas las preguntas para validar tu ejecución.");
+        return;
+      }
+      const noCount = Object.values(state.trade).filter(v => v === false).length;
+
+      if(noCount === 0){
+        setResult("#tradeResult","ok","EJECUCIÓN PERFECTA","Sigue. Tu trabajo ya está hecho. Ahora deja que el sistema trabaje.");
+        state.results.tradeStatus = "PERFECTA";
+      } else if(noCount === 1){
+        setResult("#tradeResult","warn","ATENCIÓN","Hay una desviación. No interfieras más el trade. Vuelve al sistema.");
+        state.results.tradeStatus = "ATENCIÓN";
+      } else {
+        setResult("#tradeResult","bad","MAL EJECUTADO","La operación se apartó demasiado de la disciplina. El problema aquí no es el mercado, es la ejecución.");
+        state.results.tradeStatus = "MAL";
+      }
+      qs("#continueToPostBtn").style.display = "block";
+    }
+
+    function goToPost(){
+      renderQuestions("#postQuestions", postChecklist, "post");
+      qs("#postResult").style.display = "none";
+      switchScreen("screen-post");
+    }
+
+    function backToTrade(){ switchScreen("screen-trade"); }
+
+    function evaluatePost(){
+      if(!allAnswered(state.post, postChecklist)){
+        setResult("#postResult","warn","Checklist incompleto","Responde todas las preguntas antes de cerrar el día.");
+        return;
+      }
+
+      const outcome = qs("#tradeOutcome").value;
+      const note = qs("#marketNote").value.trim();
+      const noCount = Object.values(state.post).filter(v => v === false).length;
+
+      let cls = "", title = "", text = "";
+      if(noCount === 0){
+        cls = "ok";
+        title = "DÍA PERFECTO";
+        text = outcome === "win"
+          ? "Bien ejecutado. No ganaste dinero: ejecutaste tu sistema."
+          : "Perfecto. Esto también es parte del plan. Mañana es otra ejecución.";
+      } else if(noCount <= 2){
+        cls = "warn";
+        title = "DÍA ACEPTABLE";
+        text = "Hubo pequeñas grietas. El objetivo de mañana es cerrar esas grietas sin tocar tu plan.";
+      } else {
+        cls = "bad";
+        title = "DÍA INDISCIPLINADO";
+        text = "El problema hoy no fue el resultado. Fue la ejecución. Reenfócate antes del próximo día.";
+      }
+
+      setResult("#postResult", cls, title, text);
+
+      const preScore = scoreAnswers(state.pre);
+      const tradeScore = scoreAnswers(state.trade);
+      const postScore = scoreAnswers(state.post);
+      const totalScore = Math.round((preScore + tradeScore + postScore) / 3);
+
+      const classification = noCount === 0 ? "Perfecto" : (noCount <= 2 ? "Aceptable" : "Indisciplinado");
+
+      state.results = {
+        ...state.results,
+        outcome: outcome === "win" ? "Ganó" : "Perdió",
+        note,
+        preScore,
+        tradeScore,
+        postScore,
+        totalScore,
+        classification
+      };
+
+      const entry = {
+        date: new Date().toLocaleString("es-US"),
+        accountType: state.accountType === "funded" ? "Fondeada" : "Evaluación",
+        risk: state.riskText,
+        outcome: state.results.outcome,
+        totalScore,
+        classification,
+        preStatus: state.results.preStatus,
+        tradeStatus: state.results.tradeStatus,
+        note,
+        sessionName: state.sessionName || ""
+      };
+
+      saveHistory(entry);
+      localStorage.setItem(todayKey(), "done");
+      renderFinal();
+      setTimeout(() => switchScreen("screen-final"), 450);
+    }
+
+    function renderFinal(){
+      qs("#sumAccountType").textContent = state.accountType === "funded" ? "Fondeada" : "Evaluación";
+      qs("#sumRisk").textContent = state.riskText;
+      qs("#sumOutcome").textContent = state.results.outcome;
+      qs("#sumScore").textContent = state.results.totalScore + "/100";
+      qs("#sumClass").textContent = state.results.classification;
+
+      const cls = state.results.classification === "Perfecto" ? "ok" :
+                  state.results.classification === "Aceptable" ? "warn" : "bad";
+      let message = "";
+      if(state.results.classification === "Perfecto"){
+        message = "Día cerrado con disciplina total. Ese es el negocio real.";
+      } else if(state.results.classification === "Aceptable"){
+        message = "Día válido, pero todavía hay espacio para apretar la ejecución.";
+      } else {
+        message = "Hoy la prioridad no es el PnL. Es corregir la ejecución para mañana.";
+      }
+
+      qs("#finalMessage").className = "result " + cls;
+      qs("#finalMessage").innerHTML = `
+        <div class="result-title">${state.results.classification.toUpperCase()}</div>
+        <div class="result-text">${message}</div>
+      `;
+    }
+
+    function refreshTodayLock(){
+      const done = localStorage.getItem(todayKey()) === "done";
+      const box = qs("#todayLockBox");
+      box.innerHTML = done
+        ? `<div class="locked">Ya cerraste un día de trading hoy en esta app. El sistema lo registró como día completado.</div>`
+        : "";
+    }
+
+    function showHistory(){
+      const data = getHistory();
+      const stats = qs("#historyStats");
+      const list = qs("#historyList");
+      stats.innerHTML = "";
+      list.innerHTML = "";
+
+      if(!data.length){
+        stats.innerHTML = `<div class="pill">Sin registros todavía</div>`;
+        list.innerHTML = `<div class="history-item muted">Cuando cierres tu primer día, aparecerá aquí.</div>`;
+        switchScreen("screen-history");
+        return;
+      }
+
+      const perfect = data.filter(x => x.classification === "Perfecto").length;
+      const acceptable = data.filter(x => x.classification === "Aceptable").length;
+      const bad = data.filter(x => x.classification === "Indisciplinado").length;
+      const avg = Math.round(data.reduce((a,b)=>a+(b.totalScore||0),0)/data.length);
+
+      stats.innerHTML = `
+        <div class="pill">Días: ${data.length}</div>
+        <div class="pill">Promedio: ${avg}/100</div>
+        <div class="pill">Perfectos: ${perfect}</div>
+        <div class="pill">Aceptables: ${acceptable}</div>
+        <div class="pill">Indisciplinados: ${bad}</div>
+      `;
+
+      data.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML = `
+          <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+            <div>
+              <div><strong>${item.date}</strong></div>
+              <div class="muted" style="margin-top:4px">${item.accountType} · Riesgo ${item.risk}${item.sessionName ? " · " + item.sessionName : ""}</div>
+              <div style="margin-top:8px">Resultado: <strong>${item.outcome}</strong> · Score: <strong>${item.totalScore}/100</strong> · Clasificación: <strong>${item.classification}</strong></div>
+              ${item.note ? `<div class="muted" style="margin-top:8px">Nota: ${item.note}</div>` : ``}
+            </div>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+
+      switchScreen("screen-history");
+    }
+
+    function clearHistory(){
+      if(confirm("¿Seguro que quieres borrar todo el historial?")){
+        localStorage.removeItem("fc_trading_history");
+        showHistory();
+      }
+    }
+
+    function goHome(){ switchScreen("screen-home"); }
+    renderQuestions("#preQuestions", preChecklist, "pre");
+    refreshTodayLock();
+  </script>
+</body>
+</html>
