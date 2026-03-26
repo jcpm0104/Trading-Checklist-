@@ -299,9 +299,9 @@
       { id:"rr", text:"¿Voy a respetar RR 1:2 sin moverlo?" },
       { id:"fixedRisk", text:"¿Voy a usar el riesgo fijo exacto de hoy, sin subirlo ni bajarlo?" },
       { id:"calm", text:"¿Estoy mentalmente estable para ejecutar mi plan?" },
-      { id:"revenge", text:"¿No estoy entrando para recuperar nada?" },
+      { id:"cleanIntent", text:"¿Estoy entrando solo para ejecutar mi setup, no para recuperar pérdidas?" },
       { id:"clarity", text:"¿Veo una estructura que encaja con mi estrategia?" },
-      { id:"news", text:"¿No hay una noticia fuerte inmediata que pueda distorsionar la entrada?" }
+      { id:"newsClear", text:"¿El horario está despejado de noticias fuertes inmediatas que puedan distorsionar la entrada?" }
     ];
 
     const tradeChecklist = [
@@ -404,8 +404,8 @@
       }
 
       const criticalFail = !state.pre.oneTrade || !state.pre.rr || !state.pre.fixedRisk;
-      const mentalFlags = [state.pre.calm, state.pre.revenge].filter(v => v === false).length;
-      const marketFlags = [state.pre.clarity, state.pre.news].filter(v => v === false).length;
+      const mentalFlags = [state.pre.calm, state.pre.cleanIntent].filter(v => v === false).length;
+      const marketFlags = [state.pre.clarity, state.pre.newsClear].filter(v => v === false).length;
 
       if(criticalFail){
         setResult("#preResult","bad","NO OPERAR","Hoy no estás alineado con tus reglas base. Sin 1 trade, sin RR 1:2 o sin riesgo fijo, no hay operación válida.");
